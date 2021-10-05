@@ -9,6 +9,8 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import config from './config';
+
 
 console.log('called');
 
@@ -16,7 +18,7 @@ connectDB()
 
 const app = express()
 
-if (process.env.NODE_ENV === 'development') {
+if (config.isDev) {
     app.use(morgan('dev'))
 }
 
@@ -34,7 +36,7 @@ app.use('/api/upload', uploadRoutes)
 // const __dirname = path.resolve()
 // app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
-if (process.env.NODE_ENV === 'production') {
+if (!config.isDev) {
     app.use(express.static(path.join(__dirname, '/frontend/build')))
 
     app.get('*', (req, res) =>
@@ -49,11 +51,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5001
 
 app.listen(
-    PORT,
+    +config.port,
     console.log(
-        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+        `Server running in ${config.nodeEnv} mode on port ${config.port}`.yellow.bold
     )
 )
