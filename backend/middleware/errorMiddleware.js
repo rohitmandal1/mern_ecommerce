@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../config/index.js';
 
 const notFound = (req, res, next) => {
     const error = new Error(`Not Found - ${req.originalUrl}`)
